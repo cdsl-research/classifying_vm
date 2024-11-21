@@ -1,0 +1,9 @@
+[Unit]
+Description=C0A21069　get_vm_info_tool
+
+[Timer]
+OnCalendar=*-*-* 15:00:00
+Unit=c0a21069_tool.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=C0A21069　get_vm_info_tool
+
+[Service]
+Type=oneshot
+ExecStart=/c0a21069_tool_Box/get_vm_info.sh
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
