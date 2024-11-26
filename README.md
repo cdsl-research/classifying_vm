@@ -3,6 +3,36 @@
 ## get_vm_info
 各仮想マシンからauth.log，.bash_history，ps auxの出力，find /homeの出力を定期的に収集するためのプログラムです．
 
+ps auxの実行結果
+```
+c0a21069@c0a21069-vm-info:~$ ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.6  22480 13620 ?        Ss   Nov07   0:55 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    Nov07   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        S    Nov07   0:00 [pool_workqueue_release]
+root           4  0.0  0.0      0     0 ?        I<   Nov07   0:00 [kworker/R-rcu_g]
+root           5  0.0  0.0      0     0 ?        I<   Nov07   0:00 [kworker/R-rcu_p]
+root           6  0.0  0.0      0     0 ?        I<   Nov07   0:00 [kworker/R-slub_]
+root           7  0.0  0.0      0     0 ?        I<   Nov07   0:00 [kworker/R-netns]
+root          12  0.0  0.0      0     0 ?        I<   Nov07   0:00 [kworker/R-mm_pe]
+root          13  0.0  0.0      0     0 ?        I    Nov07   0:00 [rcu_tasks_kthread]
+root          14  0.0  0.0      0     0 ?        I    Nov07   0:00 [rcu_tasks_rude_kthread]
+root          15  0.0  0.0      0     0 ?        I    Nov07   0:00 [rcu_tasks_trace_kthread]
+```
+
+find /homeの実行結果
+```
+c0a21069@c0a21069-vm-info:~$ find /home
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-09_ssh.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-24_ssh.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-25_ssh.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-22_ssh.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-21_ssh.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-24_ps.tmp
+/home/c0a21069/vm_info/c0a21099-dojo-wl/c0a21099-dojo-wl_2024-11-10_ssh.tmp
+```
+
+
 実行方法
 
 ```sh
@@ -57,7 +87,7 @@ c0a21069-db_directory.tmp
 ``get_vm_info.sh``を定期実行させるファイルです．
 
 ### c0a21069_tool.timer
-定期実行の間隔を設定するファイルです．
+定期実行の間隔を設定するファイルです． 毎日6時に実行されるように設定されています．
 
 
 
@@ -72,6 +102,17 @@ python3 analysis_vm.py
 
 収集した``auth.log``を読み込み，1日ごとに何回SSHしたかをテキストファイルに記録します．
 
+出力されるテキストファイルは下のようになっています．
+```
+【2024-10-17】
+  ユーザー: c0a21069(uid=1000) - 接続回数: 1
+
+【2024-10-24】
+  ユーザー: c0a21069(uid=1000) - 接続回数: 1
+
+【2024-10-30】
+  ユーザー: c0a21069(uid=1000) - 接続回数: 1
+```
 
 
 ### process_vm.py
@@ -82,7 +123,18 @@ python3 process_vm.py
 
 収集したps auxの出力をユーザーごとに実行しているプロセスをまとめてテキストファイルに記録します．
 
-
+出力されるテキストファイルは下のようになっています．
+```
+ユーザー: root
+  プロセス: /bin/bash /c0a21021_log_collect/log_collect.sh
+  プロセス: /bin/bash /c0a21069_tool_Box/get_vm_info.sh
+  プロセス: /bin/bash /c0a21134_tool_Box/c0a21134_log_collect.sh
+  プロセス: /sbin/agetty -o -p -- \u --noclear - linux
+  プロセス: /sbin/init
+  プロセス: /sbin/multipathd -d -s
+  プロセス: /usr/bin/VGAuthService
+  プロセス: /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+```
 
 
 
